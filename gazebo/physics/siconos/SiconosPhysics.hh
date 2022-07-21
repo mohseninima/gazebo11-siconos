@@ -96,7 +96,7 @@ namespace gazebo
       /// \brief Set the gravity vector.
       /// \param[in] _gravity New gravity vector.
       public: virtual void SetGravity(
-                  const gazebo::math::Vector3 &_gravity);
+                  const ignition::math::Vector3 &_gravity);
 
       /// \brief Debug print out of the physic engine state.
       public: virtual void DebugPrint() const;

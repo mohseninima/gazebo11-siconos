@@ -17,8 +17,6 @@ endif()
 set(CMAKE_CXX_FLAGS "-std=c++17")
 
 project (Gazebo)
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 string (TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
 string (TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
 
@@ -61,7 +59,9 @@ endif()
 # features are requested. Explicitly turning this flag off will force cmake to
 # choose -std=c++14.
 # See https://github.com/ignitionrobotics/ign-cmake/issues/13 for more info.
-set(CMAKE_CXX_EXTENSIONS off)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 ########################################
 # Package Creation:

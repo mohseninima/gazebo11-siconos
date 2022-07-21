@@ -70,8 +70,8 @@ void SiconosSurfaceParams::FillMsg(msgs::Surface &_msg)
 {
   SurfaceParams::FillMsg(_msg);
 
-  _msg.mutable_friction()->set_mu(this->frictionPyramid->GetMuPrimary());
-  _msg.mutable_friction()->set_mu2(this->frictionPyramid->GetMuSecondary());
+  _msg.mutable_friction()->set_mu(this->frictionPyramid->MuPrimary());
+  _msg.mutable_friction()->set_mu2(this->frictionPyramid->MuSecondary());
 }
 
 /////////////////////////////////////////////////

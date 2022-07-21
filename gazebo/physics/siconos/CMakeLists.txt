@@ -69,6 +69,10 @@ set (headers
 # )
 # gz_build_tests(${gtest_sources})
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 gz_add_library(gazebo_physics_siconos ${sources})
 target_link_libraries(gazebo_physics_siconos ${siconos_LIBRARIES})
 target_include_directories(gazebo_physics_siconos PRIVATE ${siconos_INCLUDE_DIRECTORIES})
