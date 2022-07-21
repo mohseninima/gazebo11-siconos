@@ -18,8 +18,8 @@
 #define _GAZEBO_SICONOSHINGEJOINT_HH_
 
 #include <string>
-#include "gazebo/math/Angle.hh"
-#include "gazebo/math/Vector3.hh"
+#include <ignition/math/Angle.hh>
+#include <ignition/math/Vector3.hh>
 #include "gazebo/physics/HingeJoint.hh"
 #include "gazebo/physics/siconos/SiconosJoint.hh"
 #include "gazebo/physics/siconos/SiconosPhysics.hh"

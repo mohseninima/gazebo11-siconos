@@ -19,6 +19,8 @@ link_directories(
   ${IGNITION-MSGS_LIBRARY_DIRS}
 )
 
+set(CMAKE_CXX_FLAGS "-std=c++17")
+
 if (WIN32)
   include_directories(${libdl_include_dir})
 endif()

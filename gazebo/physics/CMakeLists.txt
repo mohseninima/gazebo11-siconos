@@ -5,6 +5,8 @@ link_directories(
   ${Boost_LIBRARY_DIRS}
 )
 
+set(CMAKE_CXX_FLAGS "-std=c++17")
+
 # Build in ODE by default
 include_directories(SYSTEM ${CMAKE_SOURCE_DIR}/deps/opende/include)
 add_subdirectory(ode)

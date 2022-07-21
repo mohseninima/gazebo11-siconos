@@ -1,10 +1,14 @@
 include (${gazebo_cmake_dir}/GazeboUtils.cmake)
 
-include_directories(${SICONOS_INCLUDE_DIRS})
+include_directories(${SICONOS_INCLUDE_DIRS} /usr/local/include/siconos /usr/local/include/siconos/control 
+                                             /usr/local/include/siconos/io /usr/local/include/siconos/kernel
+                                             /usr/local/include/siconos/mechanics /usr/local/include/siconos/numerics)
 
 link_directories(${SICONOS_LIBRARY_DIRS})
 
 add_definitions(${SICONOS_CFLAGS})
+
+set(CMAKE_CXX_FLAGS "-std=c++17")
 
 set (sources
   # SiconosBallJoint.cc

@@ -45,8 +45,8 @@
 #include "gazebo/common/Assert.hh"
 #include "gazebo/common/Console.hh"
 #include "gazebo/common/Exception.hh"
-#include "gazebo/math/Vector3.hh"
-#include "gazebo/math/Rand.hh"
+#include <ignition/math/Vector3.hh>
+#include <ignition/math/Rand.hh>
 
 #include "gazebo/physics/siconos/siconos_inc.h"
 

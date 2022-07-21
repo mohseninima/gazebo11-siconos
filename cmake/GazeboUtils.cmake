@@ -227,6 +227,8 @@ include (${gazebo_cmake_dir}/GazeboTestUtils.cmake)
 # Based on work of Florent Lamiraux, Thomas Moulard, JRL, CNRS/AIST.
 include(CheckCXXCompilerFlag)
 
+set(CMAKE_CXX_FLAGS "-std=c++17")
+
 macro(filter_valid_compiler_flags)
   foreach(flag ${ARGN})
     CHECK_CXX_COMPILER_FLAG(${flag} R${flag})
