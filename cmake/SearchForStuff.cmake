@@ -885,6 +885,18 @@ else()
 endif ()
 
 ########################################
+# Find siconos
+find_package(siconos)
+if (siconos_FOUND)
+  message (STATUS "Looking for Siconos - found")
+  set (HAVE_SICONOS TRUE)
+else()
+  message (STATUS "Looking for Siconos - not found")
+  BUILD_WARNING ("Siconos not found, for Siconos physics engine option, please install siconos from source: http://siconos.gforge.inria.fr")
+  set (HAVE_SICONOS FALSE)
+endif ()
+
+########################################
 # On Windows, find tiny-process-library
 if (WIN32)
   option(USE_EXTERNAL_TINY_PROCESS_LIBRARY "Use external tiny-process-library." OFF)

@@ -60,6 +60,10 @@ if (UNIX)
   target_link_libraries(gz pthread)
 endif()
 
+if(HAVE_SICONOS)
+  target_link_libraries(gz gazebo_physics_siconos)
+endif()
+
 gz_install_executable(gz)
 
 if (NOT WIN32)

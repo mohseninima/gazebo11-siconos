@@ -470,6 +470,10 @@ else (build_errors)
     gazebo_rendering
   )
 
+  if (HAVE_SICONOS)
+  	set(PKG_LIBRARIES ${PKG_LIBRARIES} gazebo_physics_siconos)
+  endif()
+
   set(PKG_LIBRARIES ${PKG_LIBRARIES}
     gazebo_physics
     gazebo_ode
