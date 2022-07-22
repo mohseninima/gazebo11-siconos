@@ -51,7 +51,7 @@ namespace gazebo
                   gzerr << "Sphere shape does not support negative radius\n";
                   return;
                 }
-                if (math::equal(_radius, 0.0))
+                if (ignition::math::equal(_radius, 0.0))
                 {
                   // Warn user, but still create shape with very small value
                   // otherwise later resize operations using setLocalScaling
@@ -69,7 +69,7 @@ namespace gazebo
               }
 
       /// \brief Initial size of sphere.
-      private: math::Vector3 initialSize;
+      private: ignition::math::Vector3d initialSize;
     };
     /// \}
   }

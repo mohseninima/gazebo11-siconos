@@ -348,31 +348,31 @@ void SiconosLink::SetLinearVel(const math::Vector3 &_vel)
 }
 
 //////////////////////////////////////////////////
-math::Vector3 SiconosLink::GetWorldCoGLinearVel() const
+ignition::math::Vector3d SiconosLink::WorldCoGLinearVel() const
 {
   if (!this->rigidLink)
   {
     gzlog << "Siconos rigid body for link [" << this->GetName() << "]"
           << " does not exist, GetWorldLinearVel returns "
-          << math::Vector3(0, 0, 0) << " by default." << std::endl;
-    return math::Vector3(0, 0, 0);
+          << ignition::math::Vector3(0, 0, 0) << " by default." << std::endl;
+    return ignition::math::Vector3(0, 0, 0);
   }
 
   // btVector3 vel = this->rigidLink->getLinearVelocity();
 
   // return SiconosTypes::ConvertVector3(vel);
-  return math::Vector3(0,0,0);
+  return ignition::math::Vector3(0,0,0);
 }
 
 //////////////////////////////////////////////////
-math::Vector3 SiconosLink::GetWorldLinearVel(const math::Vector3 &_offset) const
+ignition::math::Vector3d SiconosLink::WorldLinearVel(const math::Vector3 &_offset) const
 {
   if (!this->rigidLink)
   {
     gzlog << "Siconos rigid body for link [" << this->GetName() << "]"
           << " does not exist, GetWorldLinearVel returns "
-          << math::Vector3(0, 0, 0) << " by default." << std::endl;
-    return math::Vector3(0, 0, 0);
+          << ignition::math::Vector3(0, 0, 0) << " by default." << std::endl;
+    return ignition::math::Vector3(0, 0, 0);
   }
 
   math::Pose wPose = this->GetWorldPose();
@@ -386,15 +386,15 @@ math::Vector3 SiconosLink::GetWorldLinearVel(const math::Vector3 &_offset) const
 }
 
 //////////////////////////////////////////////////
-math::Vector3 SiconosLink::GetWorldLinearVel(const math::Vector3 &_offset,
-                                            const math::Quaternion &_q) const
+ignition::math::Vector3d SiconosLink::WorldLinearVel(const ignition::math::Vector3d &_offset,
+                                            const ignition::math::Quaterniond &_q) const
 {
   if (!this->rigidLink)
   {
     gzlog << "Siconos rigid body for link [" << this->GetName() << "]"
           << " does not exist, GetWorldLinearVel returns "
-          << math::Vector3(0, 0, 0) << " by default." << std::endl;
-    return math::Vector3(0, 0, 0);
+          << ignition::math::Vector3(0, 0, 0) << " by default." << std::endl;
+    return ignition::math::Vector3(0, 0, 0);
   }
 
   math::Pose wPose = this->GetWorldPose();
@@ -405,7 +405,7 @@ math::Vector3 SiconosLink::GetWorldLinearVel(const math::Vector3 &_offset,
   //     SiconosTypes::ConvertVector3(offsetFromCoG));
 
   // return SiconosTypes::ConvertVector3(vel);
-  return math::Vector3(0,0,0);
+  return ignition::math::Vector3(0,0,0);
 }
 
 //////////////////////////////////////////////////

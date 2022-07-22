@@ -43,7 +43,7 @@ namespace gazebo
       public: virtual ~SiconosPlaneShape() {}
 
       /// \brief Set the altitude of the plane
-      public: void SetAltitude(const math::Vector3 &pos)
+      public: void SetAltitude(const ignition::math::Vector3d &pos)
               {
                 PlaneShape::SetAltitude(pos);
               }

@@ -58,7 +58,7 @@ void SiconosCollision::Load(sdf::ElementPtr _sdf)
 //////////////////////////////////////////////////
 void SiconosCollision::OnPoseChange()
 {
-  math::Pose pose = this->GetRelativePose();
+  ignition::math::Pose3 pose = this->RelativePose();
   SiconosLinkPtr bbody = boost::dynamic_pointer_cast<SiconosLink>(this->parent);
 
   // bbody->motionState.setWorldTransform(this, pose);
@@ -96,9 +96,9 @@ unsigned int SiconosCollision::GetCollideBits() const
 }*/
 
 //////////////////////////////////////////////////
-math::Box SiconosCollision::GetBoundingBox() const
+ignition::math::AxisAlignedBox SiconosCollision::BoundingBox() const
 {
-  math::Box result;
+  ignition::math::AxisAlignedBox result;
   if (this->collisionInteraction)
   {
       /*

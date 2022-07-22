@@ -335,27 +335,27 @@ void SiconosJoint::ApplyStiffnessDamping()
 
 //////////////////////////////////////////////////
 void SiconosJoint::SetAnchor(unsigned int /*_index*/,
-    const gazebo::math::Vector3 & /*_anchor*/)
+    const ignition::math::Vector3d & /*_anchor*/)
 {
   // nothing to do here for siconos.
 }
 
 //////////////////////////////////////////////////
-math::Vector3 SiconosJoint::GetAnchor(unsigned int /*_index*/) const
+ignition::math::Vector3d SiconosJoint::Anchor(unsigned int /*_index*/) const
 {
   gzerr << "Not implement in Siconos\n";
   return math::Vector3();
 }
 
 //////////////////////////////////////////////////
-math::Vector3 SiconosJoint::GetLinkForce(unsigned int /*_index*/) const
+ignition::math::Vector3d SiconosJoint::LinkForce(unsigned int /*_index*/) const
 {
   gzerr << "Not implement in Siconos\n";
   return math::Vector3();
 }
 
 //////////////////////////////////////////////////
-math::Vector3 SiconosJoint::GetLinkTorque(unsigned int /*_index*/) const
+ignition::math::Vector3d SiconosJoint::LinkTorque(unsigned int /*_index*/) const
 {
   gzerr << "Not implement in Siconos\n";
   return math::Vector3();
@@ -378,15 +378,15 @@ double SiconosJoint::GetParam(const std::string &_key,
 }
 
 //////////////////////////////////////////////////
-math::Angle SiconosJoint::GetHighStop(unsigned int _index)
+ignition::math::Angle SiconosJoint::GetHighStop(unsigned int _index)
 {
-  return this->GetUpperLimit(_index);
+  return this->UpperLimit(_index);
 }
 
 //////////////////////////////////////////////////
-math::Angle SiconosJoint::GetLowStop(unsigned int _index)
+ignition::math::Angle SiconosJoint::GetLowStop(unsigned int _index)
 {
-  return this->GetLowerLimit(_index);
+  return this->LowerLimit(_index);
 }
 
 //////////////////////////////////////////////////

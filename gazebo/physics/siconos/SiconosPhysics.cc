@@ -65,7 +65,7 @@ SiconosPhysics::SiconosPhysics(WorldPtr _world)
 
   // Set random seed for physics engine based on gazebo's random seed.
   // Note: this was moved from physics::PhysicsEngine constructor.
-  this->SetSeed(math::Rand::GetSeed());
+  this->SetSeed(ignition::math::Rand::GetSeed());
 }
 
 /// \brief Destructor
@@ -78,9 +78,9 @@ void SiconosPhysics::Load(sdf::ElementPtr _sdf)
 {
   PhysicsEngine::Load(_sdf);
 
-  math::Vector3 g = this->sdf->Get<math::Vector3>("gravity");
+  ignition::math::Vector3 g = this->sdf->Get<ignition::math::Vector3>("gravity");
   // ODEPhysics checks this, so we will too.
-  if (g == math::Vector3(0, 0, 0))
+  if (g == ignition::math::Vector3(0, 0, 0))
     gzwarn << "Gravity vector is (0, 0, 0). Objects will float.\n";
   // this->dynamicsWorld->setGravity(btVector3(g.x, g.y, g.z));
 }
@@ -172,7 +172,7 @@ JointPtr SiconosPhysics::CreateJoint(const std::string &_type,
 
 /// \brief Set the gravity vector.
 /// \param[in] _gravity New gravity vector.
-void SiconosPhysics::SetGravity(const gazebo::math::Vector3 &_gravity)
+void SiconosPhysics::SetGravity(const ignition::math::Vector3d &_gravity)
 {
 }
 

@@ -77,7 +77,7 @@ namespace gazebo
       public: virtual unsigned int GetCollideBits() const;
 
       /// \brief Get the bounding box, defined by the physics engine
-      public: virtual math::Box GetBoundingBox() const;
+      public: virtual ignition::math::AxisAlignedBox BoundingBox() const;
 
       /// \brief Set the collision interaction
       /// \param[in] _shape Collision interaction
