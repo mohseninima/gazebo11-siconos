@@ -27,7 +27,7 @@ set (sources
   # SiconosMultiRayShape.cc
   SiconosPhysics.cc
   # SiconosPolylineShape.cc
-  # SiconosRayShape.cc
+  SiconosRayShape.cc
   # SiconosScrewJoint.cc
   # SiconosSliderJoint.cc
   SiconosSurfaceParams.cc
@@ -55,7 +55,7 @@ set (headers
   SiconosPhysics.hh
   SiconosPlaneShape.hh
   # SiconosPolylineShape.hh
-  # SiconosRayShape.hh
+  SiconosRayShape.hh
   # SiconosScrewJoint.hh
   # SiconosSliderJoint.hh
   SiconosSphereShape.hh
