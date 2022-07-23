@@ -5,7 +5,8 @@ include_directories(${SICONOS_INCLUDE_DIRS}  /usr/local/include/siconos/kernel /
                                              /usr/local/include/siconos/mechanics /usr/local/include/siconos/numerics)
 
 
-link_directories(${SICONOS_LIBRARY_DIRS})
+link_directories(${SICONOS_LIBRARY_DIRS} /usr/local/lib)
+
 
 add_definitions(${SICONOS_CFLAGS})
 
@@ -75,7 +76,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 gz_add_library(gazebo_physics_siconos ${sources})
-target_link_libraries(gazebo_physics_siconos ${siconos_LIBRARIES})
+target_link_libraries(gazebo_physics_siconos ${siconos_LIBRARIES}
+                                             /usr/local/lib/libsiconos_kernel.so
+                                             /usr/local/lib/libsiconos_externals.so
+                                             /usr/local/lib/libsiconos_control.so
+                                             /usr/local/lib/libsiconos_io.so
+                                             /usr/local/lib/libsiconos_mechanics.so
+                                             /usr/local/lib/libsiconos_numerics.so)
 target_include_directories(gazebo_physics_siconos PRIVATE ${siconos_INCLUDE_DIRECTORIES})
 
 gz_install_library(gazebo_physics_siconos)
