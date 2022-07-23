@@ -70,7 +70,7 @@ void SiconosHingeJoint::Init()
   // Local variables used to compute pivots and axes in body-fixed frames
   // for the parent and child links.
   ignition::math::Vector3d pivotParent, pivotChild, axisParent, axisChild;
-  ignition:: math::Pose3d pose;
+  ignition::math::Pose3d pose;
 
   // Initialize pivots to anchorPos, which is expressed in the
   // world coordinate frame.
@@ -83,10 +83,10 @@ void SiconosHingeJoint::Init()
     // Compute relative pose between joint anchor and CoG of parent link.
     pose = this->parentLink->WorldCoGPose();
     // Subtract CoG position from anchor position, both in world frame.
-    pivotParent -= pose.pos;
+    pivotParent -= pose.Pos();
     // Rotate pivot offset and axis into body-fixed frame of parent.
-    pivotParent = pose.rot.RotateVectorReverse(pivotParent);
-    axisParent = pose.rot.RotateVectorReverse(axis);
+    pivotParent = pose.Rot().RotateVectorReverse(pivotParent);
+    axisParent = pose.Rot().RotateVectorReverse(axis);
     axisParent = axisParent.Normalize();
   }
   // Check if childLink exists. If not, the child will be the world.
@@ -95,10 +95,10 @@ void SiconosHingeJoint::Init()
     // Compute relative pose between joint anchor and CoG of child link.
     pose = this->childLink->WorldCoGPose();
     // Subtract CoG position from anchor position, both in world frame.
-    pivotChild -= pose.pos;
+    pivotChild -= pose.Pos();
     // Rotate pivot offset and axis into body-fixed frame of child.
-    pivotChild = pose.rot.RotateVectorReverse(pivotChild);
-    axisChild = pose.rot.RotateVectorReverse(axis);
+    pivotChild = pose.Rot().RotateVectorReverse(pivotChild);
+    axisChild = pose.Rot().RotateVectorReverse(axis);
     axisChild = axisChild.Normalize();
   }
 
@@ -161,7 +161,7 @@ void SiconosHingeJoint::Init()
 
   // Set angleOffset based on hinge angle at joint creation.
   // GetAngleImpl will report angles relative to this offset.
-  this->angleOffset = this->GetAngleImpl(0).Radian();
+  this->angleOffset = this->PositionImpl(0);
 
   // Apply joint angle limits here.
   // TODO: velocity and effort limits.
@@ -193,7 +193,7 @@ void SiconosHingeJoint::Init()
 }
 
 //////////////////////////////////////////////////
-ignition::math::Vector3d SiconosHingeJoint::Anchor(unsigned int /*_index*/) const
+ignition::math::Vector3d SiconosHingeJoint::Anchor(const unsigned int /*_index*/) const
 {
   // btTransform trans = this->siconosHinge->getAFrame();
   // trans.getOrigin() +=
@@ -204,7 +204,7 @@ ignition::math::Vector3d SiconosHingeJoint::Anchor(unsigned int /*_index*/) cons
 }
 
 //////////////////////////////////////////////////
-void SiconosHingeJoint::SetAxis(unsigned int /*_index*/,
+void SiconosHingeJoint::SetAxis(const unsigned int /*_index*/,
     const ignition::math::Vector3d &_axis)
 {
   // Note that _axis is given in a world frame,
@@ -212,7 +212,7 @@ void SiconosHingeJoint::SetAxis(unsigned int /*_index*/,
   if (this->siconosHinge == NULL)
   {
     // this hasn't been initialized yet, store axis in initialWorldAxis
-    math::Quaternion axisFrame = this->GetAxisFrame(0);
+    ignition::math::Quaternion axisFrame = this->AxisFrame(0);
     this->initialWorldAxis = axisFrame.RotateVector(_axis);
   }
   else
@@ -228,9 +228,9 @@ void SiconosHingeJoint::SetAxis(unsigned int /*_index*/,
 }
 
 //////////////////////////////////////////////////
-ignition::math::Angle SiconosHingeJoint::GetAngleImpl(unsigned int /*_index*/) const
+double SiconosHingeJoint::PositionImpl(unsigned int /*_index*/) const
 {
-  ignition::math::Angle result;
+  double result;
 //   if (this->siconosHinge)
 //   {
 // #ifdef LIBSICONOS_VERSION_GT_282
@@ -262,9 +262,9 @@ double SiconosHingeJoint::GetVelocity(unsigned int /*_index*/) const
   double result = 0;
   ignition::math::Vector3 globalAxis = this->GetGlobalAxis(0);
   if (this->childLink)
-    result += globalAxis.Dot(this->childLink->GetWorldAngularVel());
+    result += globalAxis.Dot(this->childLink->WorldAngularVel());
   if (this->parentLink)
-    result -= globalAxis.Dot(this->parentLink->GetWorldAngularVel());
+    result -= globalAxis.Dot(this->parentLink->WorldAngularVel());
   return result;
 }
 
@@ -308,10 +308,10 @@ void SiconosHingeJoint::SetForceImpl(unsigned int /*_index*/, double _effort)
 }
 
 //////////////////////////////////////////////////
-bool SiconosHingeJoint::SetHighStop(unsigned int /*_index*/,
-                      const ignition::math::Angle &_angle)
+void SiconosHingeJoint::SetUpperLimit(unsigned int /*_index*/,
+                      const double _limit)
 {
-  Joint::SetHighStop(0, _angle);
+  Joint::SetUpperLimit(0, _limit);
   if (this->siconosHinge)
   {
     // this function has additional parameters that we may one day
@@ -319,20 +319,20 @@ bool SiconosHingeJoint::SetHighStop(unsigned int /*_index*/,
     // settings
     // this->siconosHinge->setLimit(this->siconosHinge->getLowerLimit(),
     //                             this->angleOffset + _angle.Radian());
-    return true;
+    return;
   }
   else
   {
     gzerr << "siconosHinge not yet created.\n";
-    return false;
+    return;
   }
 }
 
 //////////////////////////////////////////////////
-bool SiconosHingeJoint::SetLowStop(unsigned int /*_index*/,
-                     const ignition::math::Angle &_angle)
+void SiconosHingeJoint::SetLowerLimit(unsigned int /*_index*/,
+                     const double _limit)
 {
-  Joint::SetLowStop(0, _angle);
+  Joint::SetLowerLimit(0, _limit);
   if (this->siconosHinge)
   {
     // this function has additional parameters that we may one day
@@ -340,19 +340,19 @@ bool SiconosHingeJoint::SetLowStop(unsigned int /*_index*/,
     // settings
     // this->siconosHinge->setLimit(this->angleOffset + _angle.Radian(),
     //                             this->siconosHinge->getUpperLimit());
-    return true;
+    return;
   }
   else
   {
     gzerr << "siconosHinge not yet created.\n";
-    return false;
+    return;
   }
 }
 
 //////////////////////////////////////////////////
-ignition::math::Angle SiconosHingeJoint::GetHighStop(unsigned int /*_index*/)
+double SiconosHingeJoint::UpperLimit(const unsigned int /*_index*/)
 {
-  ignition::math::Angle result;
+  double result;
 
   if (this->siconosHinge)
     ;
@@ -364,9 +364,9 @@ ignition::math::Angle SiconosHingeJoint::GetHighStop(unsigned int /*_index*/)
 }
 
 //////////////////////////////////////////////////
-ignition::math::Angle SiconosHingeJoint::GetLowStop(unsigned int /*_index*/)
+double SiconosHingeJoint::LowerLimit(const unsigned int /*_index*/)
 {
-  ignition::math::Angle result;
+  double result;
   if (this->siconosHinge)
     ;
     // result = this->siconosHinge->getLowerLimit();
@@ -399,7 +399,7 @@ bool SiconosHingeJoint::SetParam(const std::string &_key,
     unsigned int _index,
     const boost::any &_value)
 {
-  if (_index >= this->GetAngleCount())
+  if (_index >= this->DOF())
   {
     gzerr << "Invalid index [" << _index << "]" << std::endl;
     return false;
@@ -414,7 +414,7 @@ bool SiconosHingeJoint::SetParam(const std::string &_key,
         // enableAngularMotor takes max impulse as a parameter
         // instead of max force.
         // this means the friction will change when the step size changes.
-        double dt = this->world->GetPhysicsEngine()->GetMaxStepSize();
+        double dt = this->world->Physics()->GetMaxStepSize();
         // this->siconosHinge->enableAngularMotor(true, 0.0,
         //   dt * boost::any_cast<double>(_value));
       }
@@ -442,7 +442,7 @@ bool SiconosHingeJoint::SetParam(const std::string &_key,
 //////////////////////////////////////////////////
 double SiconosHingeJoint::GetParam(const std::string &_key, unsigned int _index)
 {
-  if (_index >= this->GetAngleCount())
+  if (_index >= this->DOF())
   {
     gzerr << "Invalid index [" << _index << "]" << std::endl;
     return 0;
@@ -452,7 +452,7 @@ double SiconosHingeJoint::GetParam(const std::string &_key, unsigned int _index)
   {
     if (this->siconosHinge)
     {
-      double dt = this->world->GetPhysicsEngine()->GetMaxStepSize();
+      double dt = this->world->Physics()->GetMaxStepSize();
       //return this->siconosHinge->getMaxMotorImpulse() / dt;
       return 0.0;
     }

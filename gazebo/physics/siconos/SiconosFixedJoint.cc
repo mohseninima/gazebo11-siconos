@@ -77,10 +77,10 @@ void SiconosFixedJoint::Init()
     // Compute relative pose between joint anchor and CoG of parent link.
     pose = this->parentLink->WorldCoGPose();
     // Subtract CoG position from anchor position, both in world frame.
-    pivotParent -= pose.pos;
+    pivotParent -= pose.Pos();
     // Rotate pivot offset and axis into body-fixed frame of parent.
-    pivotParent = pose.rot.RotateVectorReverse(pivotParent);
-    axisParent = pose.rot.RotateVectorReverse(axis);
+    pivotParent = pose.Rot().RotateVectorReverse(pivotParent);
+    axisParent = pose.Rot().RotateVectorReverse(axis);
     axisParent = axisParent.Normalize();
   }
   // Check if childLink exists. If not, the child will be the world.
@@ -89,10 +89,10 @@ void SiconosFixedJoint::Init()
     // Compute relative pose between joint anchor and CoG of child link.
     pose = this->childLink->WorldCoGPose();
     // Subtract CoG position from anchor position, both in world frame.
-    pivotChild -= pose.pos;
+    pivotChild -= pose.Pos();
     // Rotate pivot offset and axis into body-fixed frame of child.
-    pivotChild = pose.rot.RotateVectorReverse(pivotChild);
-    axisChild = pose.rot.RotateVectorReverse(axis);
+    pivotChild = pose.Rot().RotateVectorReverse(pivotChild);
+    axisChild = pose.Rot().RotateVectorReverse(axis);
     axisChild = axisChild.Normalize();
   }
 
@@ -155,7 +155,7 @@ void SiconosFixedJoint::Init()
 }
 
 //////////////////////////////////////////////////
-void SiconosFixedJoint::SetAxis(unsigned int /*_index*/,
+void SiconosFixedJoint::SetAxis(const unsigned int /*_index*/,
     const ignition::math::Vector3d &/*_axis*/)
 {
   gzwarn << "SiconosFixedJoint: called method "
@@ -163,11 +163,12 @@ void SiconosFixedJoint::SetAxis(unsigned int /*_index*/,
 }
 
 //////////////////////////////////////////////////
-ignition::math::Angle SiconosFixedJoint::GetAngleImpl(unsigned int /*_index*/) const
+double SiconosFixedJoint::PositionImpl(unsigned int /*_index*/) const
 {
   gzwarn << "SiconosFixedJoint: called method "
          << "GetAngleImpl that is not valid for joints of type fixed.\n";
-  return ignition::math::Angle();
+  double test;
+  return test;
 }
 
 //////////////////////////////////////////////////
@@ -209,21 +210,21 @@ void SiconosFixedJoint::SetForceImpl(unsigned int /*_index*/, double /*_effort*/
 }
 
 //////////////////////////////////////////////////
-bool SiconosFixedJoint::SetHighStop(unsigned int /*_index*/,
-                      const ignition::math::Angle &/*_angle*/)
+void SiconosFixedJoint::SetUpperLimit(unsigned int /*_index*/,
+                      const double /*_angle*/)
 {
   gzwarn << "SiconosFixedJoint: called method "
          << "SetHighStop that is not valid for joints of type fixed.\n";
-  return false;
+  return;
 }
 
 //////////////////////////////////////////////////
-bool SiconosFixedJoint::SetLowStop(unsigned int /*_index*/,
-                     const ignition::math::Angle &/*_angle*/)
+void SiconosFixedJoint::SetLowerLimit(unsigned int /*_index*/,
+                     const double /*_angle*/)
 {
   gzwarn << "SiconosFixedJoint: called method "
          << "SetLowStop that is not valid for joints of type fixed.\n";
-  return false;
+  return;
 }
 
 //////////////////////////////////////////////////
@@ -231,5 +232,5 @@ ignition::math::Vector3d SiconosFixedJoint::GetGlobalAxis(unsigned int /*_index*
 {
   gzwarn << "SiconosFixedJoint: called method "
          << "GetGlobalAxis that is not valid for joints of type fixed.\n";
-  return ignition::math::Vector3();
+  return ignition::math::Vector3d();
 }

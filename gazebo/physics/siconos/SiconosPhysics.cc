@@ -65,7 +65,7 @@ SiconosPhysics::SiconosPhysics(WorldPtr _world)
 
   // Set random seed for physics engine based on gazebo's random seed.
   // Note: this was moved from physics::PhysicsEngine constructor.
-  this->SetSeed(ignition::math::Rand::GetSeed());
+  this->SetSeed(ignition::math::Rand::Seed());
 }
 
 /// \brief Destructor

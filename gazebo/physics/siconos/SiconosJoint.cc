@@ -195,7 +195,7 @@ void SiconosJoint::SetupJointFeedback()
 //////////////////////////////////////////////////
 void SiconosJoint::SetDamping(unsigned int _index, double _damping)
 {
-  if (_index < this->GetAngleCount())
+  if (_index < this->DOF())
   {
     this->SetStiffnessDamping(_index, this->stiffnessCoefficient[_index],
       _damping);
@@ -203,8 +203,8 @@ void SiconosJoint::SetDamping(unsigned int _index, double _damping)
   else
   {
      gzerr << "SiconosJoint::SetDamping: index[" << _index
-           << "] is out of bounds (GetAngleCount() = "
-           << this->GetAngleCount() << ").\n";
+           << "] is out of bounds (DOF() = "
+           << this->DOF() << ").\n";
      return;
   }
 }
@@ -212,7 +212,7 @@ void SiconosJoint::SetDamping(unsigned int _index, double _damping)
 //////////////////////////////////////////////////
 void SiconosJoint::SetStiffness(unsigned int _index, double _stiffness)
 {
-  if (_index < this->GetAngleCount())
+  if (_index < this->DOF())
   {
     this->SetStiffnessDamping(_index, _stiffness,
       this->dissipationCoefficient[_index]);
@@ -220,8 +220,8 @@ void SiconosJoint::SetStiffness(unsigned int _index, double _stiffness)
   else
   {
      gzerr << "SiconosJoint::SetStiffness: index[" << _index
-           << "] is out of bounds (GetAngleCount() = "
-           << this->GetAngleCount() << ").\n";
+           << "] is out of bounds (DOF() = "
+           << this->DOF() << ").\n";
      return;
   }
 }
@@ -230,7 +230,7 @@ void SiconosJoint::SetStiffness(unsigned int _index, double _stiffness)
 void SiconosJoint::SetStiffnessDamping(unsigned int _index,
   double _stiffness, double _damping, double _reference)
 {
-  if (_index < this->GetAngleCount())
+  if (_index < this->DOF())
   {
     this->stiffnessCoefficient[_index] = _stiffness;
     this->dissipationCoefficient[_index] = _damping;
@@ -280,12 +280,12 @@ void SiconosJoint::SaveForce(unsigned int _index, double _force)
 {
   // this bit of code actually doesn't do anything physical,
   // it simply records the forces commanded inside forceApplied.
-  if (_index < this->GetAngleCount())
+  if (_index < this->DOF())
   {
-    if (this->forceAppliedTime < this->GetWorld()->GetSimTime())
+    if (this->forceAppliedTime < this->GetWorld()->SimTime())
     {
       // reset forces if time step is new
-      this->forceAppliedTime = this->GetWorld()->GetSimTime();
+      this->forceAppliedTime = this->GetWorld()->SimTime();
       this->forceApplied[0] = this->forceApplied[1] = 0;
     }
 
@@ -300,7 +300,7 @@ void SiconosJoint::SaveForce(unsigned int _index, double _force)
 //////////////////////////////////////////////////
 double SiconosJoint::GetForce(unsigned int _index)
 {
-  if (_index < this->GetAngleCount())
+  if (_index < this->DOF())
   {
     return this->forceApplied[_index];
   }
@@ -315,7 +315,7 @@ double SiconosJoint::GetForce(unsigned int _index)
 //////////////////////////////////////////////////
 void SiconosJoint::ApplyStiffnessDamping()
 {
-  for (unsigned int i = 0; i < this->GetAngleCount(); ++i)
+  for (unsigned int i = 0; i < this->DOF(); ++i)
   {
     // Take absolute value of dissipationCoefficient, since negative values of
     // dissipationCoefficient are used for adaptive damping to
@@ -324,7 +324,7 @@ void SiconosJoint::ApplyStiffnessDamping()
       * this->GetVelocity(i);
 
     double springForce = this->stiffnessCoefficient[i]
-      * (this->springReferencePosition[i] - this->GetAngle(i).Radian());
+      * (this->springReferencePosition[i] - this->Position(i);
 
     // do not change forceApplied if setting internal damping forces
     this->SetForceImpl(i, dampingForce + springForce);
@@ -334,31 +334,31 @@ void SiconosJoint::ApplyStiffnessDamping()
 }
 
 //////////////////////////////////////////////////
-void SiconosJoint::SetAnchor(unsigned int /*_index*/,
+void SiconosJoint::SetAnchor(const unsigned int /*_index*/,
     const ignition::math::Vector3d & /*_anchor*/)
 {
   // nothing to do here for siconos.
 }
 
 //////////////////////////////////////////////////
-ignition::math::Vector3d SiconosJoint::Anchor(unsigned int /*_index*/) const
+ignition::math::Vector3d SiconosJoint::Anchor(const unsigned int /*_index*/) const
 {
   gzerr << "Not implement in Siconos\n";
-  return math::Vector3();
+  return ignition::math::Vector3d();
 }
 
 //////////////////////////////////////////////////
-ignition::math::Vector3d SiconosJoint::LinkForce(unsigned int /*_index*/) const
+ignition::math::Vector3d SiconosJoint::LinkForce(const unsigned int /*_index*/) const
 {
   gzerr << "Not implement in Siconos\n";
-  return math::Vector3();
+  return igntition::math::Vector3d();
 }
 
 //////////////////////////////////////////////////
-ignition::math::Vector3d SiconosJoint::LinkTorque(unsigned int /*_index*/) const
+ignition::math::Vector3d SiconosJoint::LinkTorque(const unsigned int /*_index*/) const
 {
   gzerr << "Not implement in Siconos\n";
-  return math::Vector3();
+  return ignition::math::Vector3d();
 }
 
 //////////////////////////////////////////////////
@@ -378,13 +378,13 @@ double SiconosJoint::GetParam(const std::string &_key,
 }
 
 //////////////////////////////////////////////////
-ignition::math::Angle SiconosJoint::GetHighStop(unsigned int _index)
+double SiconosJoint::UpperLimit(const unsigned int _index)
 {
   return this->UpperLimit(_index);
 }
 
 //////////////////////////////////////////////////
-ignition::math::Angle SiconosJoint::GetLowStop(unsigned int _index)
+double SiconosJoint::LowerLimit(const unsigned int _index)
 {
   return this->LowerLimit(_index);
 }

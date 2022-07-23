@@ -50,7 +50,7 @@ SiconosLink::~SiconosLink()
 void SiconosLink::Load(sdf::ElementPtr _sdf)
 {
   this->siconosPhysics = boost::dynamic_pointer_cast<SiconosPhysics>(
-      this->GetWorld()->GetPhysicsEngine());
+      this->GetWorld()->Physics());
 
   if (this->siconosPhysics == NULL)
     gzthrow("Not using the siconos physics engine");
@@ -80,7 +80,7 @@ void SiconosLink::Init()
     this->inertial->SetInertiaMatrix(0, 0, 0, 0, 0, 0);
   }
   // btVector3 fallInertia(0, 0, 0);
-  math::Vector3 cogVec = this->inertial->GetCoG();
+  ignition::math::Vector3 cogVec = this->inertial->CoG();
 
   /// \todo FIXME:  Friction Parameters
   /// Currently, gazebo uses btCompoundShape to store multiple
@@ -106,17 +106,17 @@ void SiconosLink::Init()
 
       SurfaceParamsPtr surface = collision->GetSurface();
       GZ_ASSERT(surface, "Surface pointer for is invalid");
-      FrictionPyramidPtr friction = surface->GetFrictionPyramid();
+      FrictionPyramidPtr friction = surface->FrictionPyramid();
       GZ_ASSERT(friction, "Friction pointer is invalid");
 
-      hackMu1 = friction->GetMuPrimary();
-      hackMu2 = friction->GetMuSecondary();
+      hackMu1 = friction->MuPrimary();
+      hackMu2 = friction->MuSecondary();
       // gzerr << "link[" << this->GetName()
       //       << "] mu[" << hackMu1
       //       << "] mu2[" << hackMu2 << "]\n";
 
-      math::Pose relativePose = collision->GetRelativePose();
-      relativePose.pos -= cogVec;
+      ignition::math::Pose3d relativePose = collision->RelativePose();
+      relativePose.Pos() -= cogVec;
       // if (!this->compoundShape)
       //   this->compoundShape = new btCompoundShape();
       // dynamic_cast<btCompoundShape *>(this->compoundShape)->addChildShape(
@@ -237,7 +237,8 @@ void SiconosLink::SetGravityMode(bool _mode)
     ;
   else
   {
-    math::Vector3 g = this->siconosPhysics->GetGravity();
+    //ignition::math::Vector3 g = this->siconosPhysics->Gravity();
+    //TODO Might need the above in a ddiferent file????
     // this->rigidLink->setGravity(btVector3(g.x, g.y, g.z));
     /*btScalar btMass = this->mass.GetAsDouble();
     btmath::Vector3 fallInertia(0, 0, 0);
@@ -306,7 +307,7 @@ void SiconosLink::OnPoseChange()
 
   // this->SetEnabled(true);
 
-  const math::Pose myPose = this->GetWorldCoGPose();
+  const ignition::math::Pose3d myPose = this->WorldCoGPose();
 
   // this->rigidLink->setCenterOfMassTransform(
   //   SiconosTypes::ConvertPose(myPose));
@@ -335,7 +336,7 @@ void SiconosLink::SetEnabled(bool /*_enable*/) const
 }
 
 //////////////////////////////////////////////////
-void SiconosLink::SetLinearVel(const math::Vector3 &_vel)
+void SiconosLink::SetLinearVel(const ignition::math::Vector3d &_vel)
 {
   if (!this->rigidLink)
   {
@@ -353,36 +354,36 @@ ignition::math::Vector3d SiconosLink::WorldCoGLinearVel() const
   if (!this->rigidLink)
   {
     gzlog << "Siconos rigid body for link [" << this->GetName() << "]"
-          << " does not exist, GetWorldLinearVel returns "
-          << ignition::math::Vector3(0, 0, 0) << " by default." << std::endl;
-    return ignition::math::Vector3(0, 0, 0);
+          << " does not exist, WorldLinearVel returns "
+          << ignition::math::Vector3(0.0, 0.0, 0.0) << " by default." << std::endl;
+    return ignition::math::Vector3(0.0, 0.0, 0.0);
   }
 
   // btVector3 vel = this->rigidLink->getLinearVelocity();
 
   // return SiconosTypes::ConvertVector3(vel);
-  return ignition::math::Vector3(0,0,0);
+  return ignition::math::Vector3(0.0,0.0,0.0);
 }
 
 //////////////////////////////////////////////////
-ignition::math::Vector3d SiconosLink::WorldLinearVel(const math::Vector3 &_offset) const
+ignition::math::Vector3d SiconosLink::WorldLinearVel(const ignition::math::Vector3d &_offset) const
 {
   if (!this->rigidLink)
   {
     gzlog << "Siconos rigid body for link [" << this->GetName() << "]"
-          << " does not exist, GetWorldLinearVel returns "
-          << ignition::math::Vector3(0, 0, 0) << " by default." << std::endl;
-    return ignition::math::Vector3(0, 0, 0);
+          << " does not exist, WorldLinearVel returns "
+          << ignition::math::Vector3(0.0, 0.0, 0.0) << " by default." << std::endl;
+    return ignition::math::Vector3(0.0, 0.0, 0.0);
   }
 
-  math::Pose wPose = this->GetWorldPose();
+  ignition::math::Pose3d wPose = this->WorldPose();
   GZ_ASSERT(this->inertial != NULL, "Inertial pointer is NULL");
-  math::Vector3 offsetFromCoG = wPose.rot*(_offset - this->inertial->GetCoG());
+  ignition::math::Vector3 offsetFromCoG = wPose.Rot()*(_offset - this->inertial->CoG());
   // btVector3 vel = this->rigidLink->getVelocityInLocalPoint(
   //     SiconosTypes::ConvertVector3(offsetFromCoG));
 
   // return SiconosTypes::ConvertVector3(vel);
-  return math::Vector3(0,0,0);
+  return ignition::math::Vector3d(0,0,0);
 }
 
 //////////////////////////////////////////////////
@@ -392,24 +393,24 @@ ignition::math::Vector3d SiconosLink::WorldLinearVel(const ignition::math::Vecto
   if (!this->rigidLink)
   {
     gzlog << "Siconos rigid body for link [" << this->GetName() << "]"
-          << " does not exist, GetWorldLinearVel returns "
-          << ignition::math::Vector3(0, 0, 0) << " by default." << std::endl;
-    return ignition::math::Vector3(0, 0, 0);
+          << " does not exist, WorldLinearVel returns "
+          << ignition::math::Vector3d(0, 0, 0) << " by default." << std::endl;
+    return ignition::math::Vector3d(0, 0, 0);
   }
 
-  math::Pose wPose = this->GetWorldPose();
+  ignition::math::Pose3d wPose = this->WorldPose();
   GZ_ASSERT(this->inertial != NULL, "Inertial pointer is NULL");
-  math::Vector3 offsetFromCoG = _q*_offset
-        - wPose.rot*this->inertial->GetCoG();
+  ignition::math::Vector3 offsetFromCoG = _q*_offset
+        - wPose.Rot()*this->inertial->CoG();
   // btVector3 vel = this->rigidLink->getVelocityInLocalPoint(
   //     SiconosTypes::ConvertVector3(offsetFromCoG));
 
   // return SiconosTypes::ConvertVector3(vel);
-  return ignition::math::Vector3(0,0,0);
+  return ignition::math::Vector3d(0,0,0);
 }
 
 //////////////////////////////////////////////////
-void SiconosLink::SetAngularVel(const math::Vector3 &_vel)
+void SiconosLink::SetAngularVel(const ignition::math::Vector3d &_vel)
 {
   if (!this->rigidLink)
   {
@@ -422,24 +423,24 @@ void SiconosLink::SetAngularVel(const math::Vector3 &_vel)
 }
 
 //////////////////////////////////////////////////
-math::Vector3 SiconosLink::GetWorldAngularVel() const
+ignition::math::Vector3d SiconosLink::WorldAngularVel() const
 {
   if (!this->rigidLink)
   {
     gzlog << "Siconos rigid body for link [" << this->GetName() << "]"
-          << " does not exist, GetWorldAngularVel returns "
-          << math::Vector3(0, 0, 0) << " by default." << std::endl;
-    return math::Vector3(0, 0, 0);
+          << " does not exist, WorldAngularVel returns "
+          << ignition::math::Vector3d(0, 0, 0) << " by default." << std::endl;
+    return ignition::math::Vector3d(0, 0, 0);
   }
 
   // btVector3 vel = this->rigidLink->getAngularVelocity();
 
   // return SiconosTypes::ConvertVector3(vel);
-  return math::Vector3(0,0,0);
+  return ignition::math::Vector3d(0,0,0);
 }
 
 //////////////////////////////////////////////////
-void SiconosLink::SetForce(const math::Vector3 &_force)
+void SiconosLink::SetForce(const ignition::math::Vector3d &_force)
 {
   if (!this->rigidLink)
     return;
@@ -449,21 +450,21 @@ void SiconosLink::SetForce(const math::Vector3 &_force)
 }
 
 //////////////////////////////////////////////////
-math::Vector3 SiconosLink::GetWorldForce() const
+ignition::math::Vector3d SiconosLink::WorldForce() const
 {
   if (!this->rigidLink)
-    return math::Vector3(0, 0, 0);
+    return ignition::math::Vector3d(0, 0, 0);
 
   // btVector3 btVec;
 
   // btVec = this->rigidLink->getTotalForce();
 
   // return math::Vector3(btVec.x(), btVec.y(), btVec.z());
-  return math::Vector3(0,0,0);
+  return ignition::math::Vector3d(0,0,0);
 }
 
 //////////////////////////////////////////////////
-void SiconosLink::SetTorque(const math::Vector3 &_torque)
+void SiconosLink::SetTorque(const ignition::math::Vector3d &_torque)
 {
   if (!this->rigidLink)
   {
@@ -476,7 +477,7 @@ void SiconosLink::SetTorque(const math::Vector3 &_torque)
 }
 
 //////////////////////////////////////////////////
-math::Vector3 SiconosLink::GetWorldTorque() const
+ignition::math::Vector3d SiconosLink::WorldTorque() const
 {
   /*
   if (!this->rigidLink)
@@ -488,7 +489,7 @@ math::Vector3 SiconosLink::GetWorldTorque() const
 
   return math::Vector3(btVec.x(), btVec.y(), btVec.z());
   */
-  return math::Vector3();
+  return ignition::math::Vector3d();
 }
 
 //////////////////////////////////////////////////
@@ -567,49 +568,49 @@ void SiconosLink::SetAngularDamping(double _damping)
 }*/
 
 /////////////////////////////////////////////////
-void SiconosLink::AddForce(const math::Vector3 &/*_force*/)
+void SiconosLink::AddForce(const ignition::math::Vector3d &/*_force*/)
 {
   gzlog << "SiconosLink::AddForce not yet implemented." << std::endl;
 }
 
 /////////////////////////////////////////////////
-void SiconosLink::AddRelativeForce(const math::Vector3 &/*_force*/)
+void SiconosLink::AddRelativeForce(const ignition::math::Vector3d &/*_force*/)
 {
   gzlog << "SiconosLink::AddRelativeForce not yet implemented." << std::endl;
 }
 
 /////////////////////////////////////////////////
-void SiconosLink::AddForceAtWorldPosition(const math::Vector3 &/*_force*/,
-                                         const math::Vector3 &/*_pos*/)
+void SiconosLink::AddForceAtWorldPosition(const ignition::math::Vector3d &/*_force*/,
+                                         const ignition::math::Vector3d &/*_pos*/)
 {
   gzlog << "SiconosLink::AddForceAtWorldPosition not yet implemented."
         << std::endl;
 }
 
 /////////////////////////////////////////////////
-void SiconosLink::AddForceAtRelativePosition(const math::Vector3 &/*_force*/,
-                  const math::Vector3 &/*_relpos*/)
+void SiconosLink::AddForceAtRelativePosition(const ignition::math::Vector3d &/*_force*/,
+                  const ignition::math::Vector3d &/*_relpos*/)
 {
   gzlog << "SiconosLink::AddForceAtRelativePosition not yet implemented."
         << std::endl;
 }
 
 //////////////////////////////////////////////////
-void SiconosLink::AddLinkForce(const math::Vector3 &/*_force*/,
-    const math::Vector3 &/*_offset*/)
+void SiconosLink::AddLinkForce(const ignition::math::Vector3d &/*_force*/,
+    const ignition::math::Vector3d &/*_offset*/)
 {
   gzlog << "SiconosLink::AddLinkForce not yet implemented (#1476)."
         << std::endl;
 }
 
 /////////////////////////////////////////////////
-void SiconosLink::AddTorque(const math::Vector3 &/*_torque*/)
+void SiconosLink::AddTorque(const ignition::math::Vector3d &/*_torque*/)
 {
   gzlog << "SiconosLink::AddTorque not yet implemented." << std::endl;
 }
 
 /////////////////////////////////////////////////
-void SiconosLink::AddRelativeTorque(const math::Vector3 &/*_torque*/)
+void SiconosLink::AddRelativeTorque(const ignition::math::Vector3d &/*_torque*/)
 {
   gzlog << "SiconosLink::AddRelativeTorque not yet implemented." << std::endl;
 }

@@ -53,7 +53,7 @@ namespace gazebo
       public: virtual void Init();
 
       // Documentation inherited.
-      public: virtual void SetAxis(unsigned int _index,
+      public: virtual void SetAxis(const unsigned int _index,
                   const ignition::math::Vector3d &_axis);
 
       // Documentation inherited.
@@ -69,18 +69,18 @@ namespace gazebo
       public: virtual double GetMaxForce(unsigned int _index);
 
       // Documentation inherited.
-      public: virtual bool SetHighStop(unsigned int _index,
-                  const ignition::math::Angle &_angle);
+      public: virtual void SetUpperLimit(unsigned int _index,
+                  const double _limit);
 
       // Documentation inherited.
-      public: virtual bool SetLowStop(unsigned int _index,
-                  const ignition::math::Angle &_angle);
+      public: virtual void SetLowerLimit(unsigned int _index,
+                  const double _limit);
 
       // Documentation inherited.
       public: virtual ignition::math::Vector3d GetGlobalAxis(unsigned int _index) const;
 
       // Documentation inherited.
-      public: virtual ignition::math::Angle GetAngleImpl(unsigned int _index) const;
+      public: virtual double PositionImpl(unsigned int _index) const;
 
       // Documentation inherited.
       protected: virtual void SetForceImpl(unsigned int _index, double _effort);
