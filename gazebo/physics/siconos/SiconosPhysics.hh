@@ -102,10 +102,10 @@ namespace gazebo
       public: virtual void DebugPrint() const;
 
       /// \brief Return the composite dynamical system (world)
-      public: SP::Model GetDynamicsWorld() const
+      public: SP::NonSmoothDynamicalSystem GetDynamicsWorld() const
         {return this->dynamicsWorld;}
 
-      private: SP::Model dynamicsWorld;
+      private: SP::NonSmoothDynamicalSystem dynamicsWorld;
 
       private: common::Time lastUpdateTime;
 

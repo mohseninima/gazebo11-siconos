@@ -41,7 +41,7 @@ namespace gazebo
       /// \brief Constructor
       /// \param[in] world pointer to the siconos composite dynamical system
       /// \param[in] _parent pointer to the parent Model
-      public: SiconosFixedJoint(SP::Model world, BasePtr _parent);
+      public: SiconosFixedJoint(SP::NonSmoothDynamicalSystem world, BasePtr _parent);
 
       /// \brief Destructor
       public: virtual ~SiconosFixedJoint();
@@ -77,7 +77,7 @@ namespace gazebo
                   const double _limit);
 
       // Documentation inherited.
-      public: virtual ignition::math::Vector3d GetGlobalAxis(unsigned int _index) const;
+      public: virtual ignition::math::Vector3d GlobalAxis(const unsigned int _index) const;
 
       // Documentation inherited.
       public: virtual double PositionImpl(unsigned int _index) const;

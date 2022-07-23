@@ -28,7 +28,7 @@ using namespace gazebo;
 using namespace physics;
 
 //////////////////////////////////////////////////
-SiconosHingeJoint::SiconosHingeJoint(SP::Model _world, BasePtr _parent)
+SiconosHingeJoint::SiconosHingeJoint(SP::NonSmoothDynamicalSystem _world, BasePtr _parent)
     : HingeJoint<SiconosJoint>(_parent)
 {
   GZ_ASSERT(_world, "siconos world pointer is NULL");
@@ -260,7 +260,7 @@ void SiconosHingeJoint::SetVelocity(unsigned int _index, double _angle)
 double SiconosHingeJoint::GetVelocity(unsigned int /*_index*/) const
 {
   double result = 0;
-  ignition::math::Vector3 globalAxis = this->GetGlobalAxis(0);
+  ignition::math::Vector3 globalAxis = this->GlobalAxis(0);
   if (this->childLink)
     result += globalAxis.Dot(this->childLink->WorldAngularVel());
   if (this->parentLink)
@@ -377,7 +377,7 @@ double SiconosHingeJoint::LowerLimit(const unsigned int /*_index*/)
 }
 
 //////////////////////////////////////////////////
-ignition::math::Vector3d SiconosHingeJoint::GetGlobalAxis(unsigned int /*_index*/) const
+ignition::math::Vector3d SiconosHingeJoint::GlobalAxis(const unsigned int /*_index*/) const
 {
   ignition::math::Vector3 result = this->initialWorldAxis;
 

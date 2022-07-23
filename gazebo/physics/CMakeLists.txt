@@ -191,6 +191,9 @@ endif()
 
 if (HAVE_SICONOS)
   add_subdirectory(siconos)
+  include_directories(${SICONOS_INCLUDE_DIRS}  /usr/local/include/siconos/kernel /usr/local/include/siconos
+                                               /usr/local/include/siconos/io /usr/local/include/siconos/control
+                                              /usr/local/include/siconos/mechanics /usr/local/include/siconos/numerics)
 endif()
 
 if (HAVE_SICONOS)

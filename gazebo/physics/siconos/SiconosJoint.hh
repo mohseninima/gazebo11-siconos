@@ -151,7 +151,7 @@ namespace gazebo
       protected: Interaction *constraint;
 
       /// \brief Pointer to Siconos' composite dynamical system.
-      protected: SP::Model siconosWorld;
+      protected: SP::NonSmoothDynamicalSystem siconosWorld;
 
       /// \brief Feedback data for this joint
       // private: btJointFeedback *feedback;

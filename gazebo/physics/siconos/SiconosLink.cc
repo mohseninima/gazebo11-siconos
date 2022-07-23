@@ -163,7 +163,7 @@ void SiconosLink::Init()
   // if (mass <= 0.0)
   //   this->rigidLink->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
 
-  SP::Model siconosWorld = this->siconosPhysics->GetDynamicsWorld();
+  SP::NonSmoothDynamicalSystem siconosWorld = this->siconosPhysics->GetDynamicsWorld();
   GZ_ASSERT(siconosWorld != NULL, "Siconos dynamics world is NULL");
 
   // siconos supports setting bits to a rigid body but not individual
@@ -206,7 +206,7 @@ void SiconosLink::Init()
 void SiconosLink::Fini()
 {
   Link::Fini();
-  SP::Model siconosWorld = this->siconosPhysics->GetDynamicsWorld();
+  SP::NonSmoothDynamicalSystem siconosWorld = this->siconosPhysics->GetDynamicsWorld();
   GZ_ASSERT(siconosWorld != NULL, "Siconos dynamics world is NULL");
   // siconosWorld->removeRigidBody(this->rigidLink);
 }
@@ -508,7 +508,7 @@ void SiconosLink::ClearCollisionCache()
     return;
   }
 
-  SP::Model siconosWorld = this->siconosPhysics->GetDynamicsWorld();
+  SP::NonSmoothDynamicalSystem siconosWorld = this->siconosPhysics->GetDynamicsWorld();
   GZ_ASSERT(siconosWorld != NULL, "Siconos dynamics world is NULL");
 
   // siconosWorld->updateSingleAabb(this->rigidLink);

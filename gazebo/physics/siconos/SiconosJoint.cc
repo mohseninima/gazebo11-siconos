@@ -324,7 +324,7 @@ void SiconosJoint::ApplyStiffnessDamping()
       * this->GetVelocity(i);
 
     double springForce = this->stiffnessCoefficient[i]
-      * (this->springReferencePosition[i] - this->Position(i);
+      * (this->springReferencePosition[i] - this->Position(i));
 
     // do not change forceApplied if setting internal damping forces
     this->SetForceImpl(i, dampingForce + springForce);
@@ -351,7 +351,7 @@ ignition::math::Vector3d SiconosJoint::Anchor(const unsigned int /*_index*/) con
 ignition::math::Vector3d SiconosJoint::LinkForce(const unsigned int /*_index*/) const
 {
   gzerr << "Not implement in Siconos\n";
-  return igntition::math::Vector3d();
+  return ignition::math::Vector3d();
 }
 
 //////////////////////////////////////////////////

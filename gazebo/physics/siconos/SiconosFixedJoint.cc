@@ -28,7 +28,7 @@ using namespace gazebo;
 using namespace physics;
 
 //////////////////////////////////////////////////
-SiconosFixedJoint::SiconosFixedJoint(SP::Model _world, BasePtr _parent)
+SiconosFixedJoint::SiconosFixedJoint(SP::NonSmoothDynamicalSystem _world, BasePtr _parent)
     : FixedJoint<SiconosJoint>(_parent)
 {
   GZ_ASSERT(_world, "siconos world pointer is NULL");
@@ -228,9 +228,9 @@ void SiconosFixedJoint::SetLowerLimit(unsigned int /*_index*/,
 }
 
 //////////////////////////////////////////////////
-ignition::math::Vector3d SiconosFixedJoint::GetGlobalAxis(unsigned int /*_index*/) const
+ignition::math::Vector3d SiconosFixedJoint::GlobalAxis(const unsigned int /*_index*/) const
 {
   gzwarn << "SiconosFixedJoint: called method "
-         << "GetGlobalAxis that is not valid for joints of type fixed.\n";
+         << "GlobalAxis that is not valid for joints of type fixed.\n";
   return ignition::math::Vector3d();
 }
