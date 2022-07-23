@@ -89,7 +89,7 @@ void SiconosSurfaceParams::ProcessMsg(const msgs::Surface &_msg)
 }
 
 /////////////////////////////////////////////////
-FrictionPyramidPtr SiconosSurfaceParams::GetFrictionPyramid() const
+FrictionPyramidPtr SiconosSurfaceParams::FrictionPyramid() const
 {
   return this->frictionPyramid;
 }
